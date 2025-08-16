@@ -1,0 +1,188 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    style.
+      body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        margin: 0;
+        padding: 30px;
+        background: #f8f9fb;
+        font-size: 13px;
+        color: #333;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        border-bottom: 3px solid #52008c;
+      }
+
+      .logo img {
+        max-width: 150px;
+      }
+
+      .company-info {
+        text-align: right;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      h1.invoice {
+        font-size: 36px;
+        color: #52008c;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+
+      .invoice-meta {
+        display: flex;
+        justify-content: space-between;
+        margin: 25px 0 40px;
+      }
+
+      .invoice-meta .box {
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        flex: 1;
+        margin-right: 20px;
+      }
+      .invoice-meta .box:last-child { margin-right: 0; }
+
+      .invoice-meta strong {
+        display: block;
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 4px;
+      }
+
+      .invoice-meta span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .billTo {
+        text-align: right;
+        font-size: 13px;
+        margin-bottom: 40px;
+      }
+
+      table.table-invoice {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 25px;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      }
+
+      table.table-invoice thead {
+        background: #52008c;
+        color: #fff;
+      }
+
+      table.table-invoice th, 
+      table.table-invoice td {
+        padding: 12px 15px;
+        text-align: right;
+        font-size: 13px;
+      }
+
+      table.table-invoice th.service, 
+      table.table-invoice td.service {
+        text-align: left;
+      }
+
+      table.table-invoice tbody tr:nth-child(even) {
+        background: #f9f9fc;
+      }
+
+      table.table-invoice tfoot tr td {
+        font-weight: bold;
+        background: #f4f2f9;
+      }
+
+      table.table-invoice .grand {
+        background: #52008c !important;
+        color: #fff;
+        font-size: 15px;
+      }
+
+      footer {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+      }
+
+  body
+    header
+      .logo
+        img(src=settings.public_server_file+settings.company_logo)
+      .company-info
+        p.strong #{settings.company_name}
+        p #{settings.company_address}
+        p #{settings.company_reg_number}
+
+    h1.invoice #{translate('invoice')}
+
+    .invoice-meta
+      .box
+        strong #{translate('Date')}
+        span #{moment(model.date).format(dateFormat)}
+      .box
+        strong #{translate('Expired Date')}
+        span #{moment(model.expiredDate).format(dateFormat)}
+      .box
+        strong #{translate('Number')}
+        span ##{model.number}/#{model.year || ""}
+
+    .billTo
+      p.strong #{translate('Bill To')}
+      p #{model.client.name}
+      p #{model.client.address}
+      p #{model.client.phone}
+      p #{model.client.email}
+
+    table.table-invoice
+      thead
+        tr
+          th.service #{translate('Item')}
+          th #{translate('Quantity')}
+          th #{translate('Price')}
+          th #{translate('Total')}
+      tbody
+        each item in model.items
+          tr
+            td.service 
+              | #{item.itemName}
+              if item.description
+                br
+                small #{item.description}
+            td #{item.quantity}
+            td #{moneyFormatter({amount:item.price})}
+            td #{moneyFormatter({amount:item.total})}
+      tfoot
+        tr
+          td(colspan="3") #{translate('Sub Total')}
+          td #{moneyFormatter({amount:model.subTotal})}
+        tr
+          td(colspan="3") #{translate('Tax')} (#{model.taxRate}%)
+          td #{moneyFormatter({amount:model.taxTotal})}
+        tr.grand
+          td(colspan="3") #{translate('Grand Total')}
+          td #{moneyFormatter({amount:model.total})}
+
+    footer
+      | Thank you for your business! This invoice was generated automatically.

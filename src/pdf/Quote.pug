@@ -1,0 +1,248 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    //- Inline CSS must be wrapped in style.
+    style.
+      :root {
+        --primary: #52008c;
+        --ink: #333333;
+        --muted: #777777;
+        --line: #e7e7ef;
+        --bg: #f6f7fb;
+        --card: #ffffff;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        font-size: 13px;
+        color: var(--ink);
+        background: var(--bg);
+        padding: 28px;
+      }
+
+      /* Card wrapper */
+      .paper {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        overflow: hidden;
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 22px 16px 22px;
+        border-bottom: 3px solid var(--primary);
+      }
+      .logo img {
+        max-width: 160px;
+        height: auto;
+        display: block;
+      }
+      .company-info {
+        text-align: right;
+        line-height: 1.5;
+      }
+      .company-info .name {
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .company-info .line { color: var(--muted); }
+
+      /* Title */
+      .title {
+        padding: 18px 22px 6px 22px;
+      }
+      h1.quote {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: .5px;
+        color: var(--primary);
+        text-transform: uppercase;
+      }
+
+      /* Meta boxes */
+      .meta {
+        display: flex;
+        gap: 14px;
+        padding: 8px 22px 20px 22px;
+      }
+      .meta .box {
+        flex: 1;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+      .meta .label {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .meta .value {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Bill To */
+      .billto-wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 0 22px 6px 22px;
+      }
+      .billto {
+        flex: 1;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+      .billto .label {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+      }
+      .billto p { margin: 0 0 4px 0; }
+
+      /* Items table */
+      .table-wrap {
+        padding: 14px 22px 6px 22px;
+      }
+      table.table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      thead th {
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 14px;
+        font-size: 12px;
+        text-align: right;
+        white-space: nowrap;
+      }
+      thead th.service { text-align: left; }
+      tbody td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        text-align: right;
+        vertical-align: top;
+        font-size: 12px;
+      }
+      tbody td.service { text-align: left; }
+      tbody tr:nth-child(even) td { background: #faf9ff; }
+      .desc {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* Totals */
+      tfoot td {
+        padding: 12px 14px;
+        text-align: right;
+        font-weight: 600;
+        border-top: 1px solid var(--line);
+        background: #f4f2fb;
+      }
+      tfoot tr.grand td {
+        background: var(--primary);
+        color: #fff;
+        font-size: 14px;
+      }
+
+      /* Footer */
+      footer {
+        padding: 16px 22px 22px 22px;
+        border-top: 1px solid var(--line);
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+  body
+    .paper
+      header
+        .logo
+          //- Ensure PUBLIC_SERVER_FILE + company_logo yields an absolute/served path
+          img(src=settings.public_server_file + settings.company_logo)
+        .company-info
+          div.name= settings.company_name
+          if settings.company_address
+            div.line= settings.company_address
+          if settings.company_reg_number
+            div.line= settings.company_reg_number
+
+      .title
+        h1.quote #{translate('quote')}
+
+      .meta
+        .box
+          span.label #{translate('Date')}
+          span.value #{moment(model.date).format(dateFormat)}
+        .box
+          span.label #{translate('Expired Date')}
+          span.value #{moment(model.expiredDate).format(dateFormat)}
+        .box
+          span.label #{translate('Number')}
+          span.value ##{model.number}/#{model.year || ""}
+
+      .billto-wrap
+        .billto
+          span.label #{translate('Bill To')}
+          p #{model.client.name}
+          if model.client.address
+            p #{model.client.address}
+          if model.client.phone
+            p #{model.client.phone}
+          if model.client.email
+            p #{model.client.email}
+
+      .table-wrap
+        table.table
+          thead
+            tr
+              th.service #{translate('item')}
+              th #{translate('Quantity')}
+              th #{translate('PRICE')}
+              th #{translate('TOTAL')}
+          tbody
+            each item in model.items
+              tr
+                td.service
+                  | #{item.itemName}
+                  if item.description
+                    span.desc #{item.description}
+                td #{item.quantity}
+                td #{moneyFormatter({ amount: item.price })}
+                td #{moneyFormatter({ amount: item.total })}
+          tfoot
+            tr
+              td(colspan="3") #{translate('SUB TOTAL')}
+              td #{moneyFormatter({ amount: model.subTotal })}
+            tr
+              td(colspan="3") #{translate('TAX')} (#{model.taxRate}%)
+              td #{moneyFormatter({ amount: model.taxTotal })}
+            tr.grand
+              td(colspan="3") #{translate('TOTAL')}
+              td #{moneyFormatter({ amount: model.total })}
+
+      footer
+        | #{translate('Thank you for your consideration')}.
+        |  #{'This quote was generated automatically.'}
