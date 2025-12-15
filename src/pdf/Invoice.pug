@@ -1,188 +1,860 @@
 doctype html
-html
+html(lang="en")
   head
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1")
     style.
-      body {
-        font-family: 'Helvetica Neue', Arial, sans-serif;
+      /* Premium Compact Invoice with Page Break Support */
+      * {
         margin: 0;
-        padding: 30px;
-        background: #f8f9fb;
-        font-size: 13px;
-        color: #333;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      header {
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #1a1a1a;
+        background: #ffffff;
+        padding: 40px 30px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .invoice-wrapper {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+      }
+
+      /* Page Break Control */
+      .page-break {
+        page-break-before: always;
+        margin-top: 50px;
+        padding-top: 50px;
+        border-top: 2px dashed #ddd;
+      }
+
+      .avoid-break {
+        page-break-inside: avoid;
+      }
+
+      .break-before {
+        page-break-before: always;
+      }
+
+      .break-after {
+        page-break-after: always;
+      }
+
+      /* Header */
+      .invoice-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        padding-bottom: 15px;
-        margin-bottom: 30px;
-        border-bottom: 3px solid #52008c;
+        align-items: flex-start;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #1a1a1a;
+        page-break-inside: avoid;
       }
 
-      .logo img {
-        max-width: 150px;
+      .company-section {
+        flex: 1;
       }
 
-      .company-info {
+      .company-name {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 5px;
+        letter-spacing: -0.5px;
+      }
+
+      .company-details {
+        color: #666;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .company-details p {
+        margin: 2px 0;
+      }
+
+      .invoice-title-section {
         text-align: right;
+      }
+
+      .invoice-title {
+        font-size: 36px;
+        font-weight: 300;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+      }
+
+      .invoice-number {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      /* Information Grid */
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+        page-break-inside: avoid;
+      }
+
+      .info-block {
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        border: 1px solid #eee;
+      }
+
+      .block-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 12px;
+        font-weight: 600;
+      }
+
+      .info-row {
+        display: flex;
+        margin-bottom: 8px;
+      }
+
+      .info-label {
+        min-width: 90px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .info-value {
+        color: #1a1a1a;
+        font-weight: 500;
+      }
+
+      .client-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+      }
+
+      .client-details {
+        color: #666;
         font-size: 13px;
         line-height: 1.5;
       }
 
-      h1.invoice {
-        font-size: 36px;
-        color: #52008c;
-        margin: 0;
-        letter-spacing: 1px;
+      .client-details p {
+        margin: 3px 0;
       }
 
-      .invoice-meta {
-        display: flex;
-        justify-content: space-between;
-        margin: 25px 0 40px;
-      }
-
-      .invoice-meta .box {
-        background: #fff;
-        padding: 15px 20px;
-        border-radius: 8px;
-        border: 1px solid #eee;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        flex: 1;
-        margin-right: 20px;
-      }
-      .invoice-meta .box:last-child { margin-right: 0; }
-
-      .invoice-meta strong {
-        display: block;
-        font-size: 12px;
-        color: #888;
-        margin-bottom: 4px;
-      }
-
-      .invoice-meta span {
-        font-size: 14px;
+      /* Status Badge */
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-paid {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+      }
+
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+      }
+
+      .status-overdue {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+      }
+
+      .status-partial {
+        background: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #93c5fd;
+      }
+
+      /* Items Table */
+      .items-section {
+        margin: 30px 0;
+        page-break-inside: avoid;
+      }
+
+      .section-title {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        page-break-inside: avoid;
+      }
+
+      .items-table thead {
+        background: #1a1a1a;
+        color: white;
+        display: table-header-group;
+      }
+
+      .items-table th {
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white !important; /* Add this line */
+      }
+
+      .items-table td {
+        padding: 14px 15px;
+        border-bottom: 1px solid #eee;
         color: #333;
       }
 
-      .billTo {
-        text-align: right;
-        font-size: 13px;
-        margin-bottom: 40px;
+      .items-table tbody tr:nth-child(even) {
+        background: #fafafa;
       }
 
-      table.table-invoice {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 25px;
-        background: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      .items-table tbody tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
       }
 
-      table.table-invoice thead {
-        background: #52008c;
-        color: #fff;
+      .item-name {
+        font-weight: 500;
+        color: #1a1a1a;
       }
 
-      table.table-invoice th, 
-      table.table-invoice td {
-        padding: 12px 15px;
-        text-align: right;
-        font-size: 13px;
-      }
-
-      table.table-invoice th.service, 
-      table.table-invoice td.service {
-        text-align: left;
-      }
-
-      table.table-invoice tbody tr:nth-child(even) {
-        background: #f9f9fc;
-      }
-
-      table.table-invoice tfoot tr td {
-        font-weight: bold;
-        background: #f4f2f9;
-      }
-
-      table.table-invoice .grand {
-        background: #52008c !important;
-        color: #fff;
-        font-size: 15px;
-      }
-
-      footer {
-        margin-top: 50px;
-        text-align: center;
+      .item-description {
+        color: #888;
         font-size: 12px;
-        color: #777;
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
+        margin-top: 3px;
+      }
+
+      .text-right {
+        text-align: right;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      /* Payment Status */
+      .payment-status {
+        margin-top: 20px;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border-left: 4px solid #3b82f6;
+        page-break-inside: avoid;
+      }
+
+      .payment-status-title {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .payment-status-title::before {
+        content: '💰';
+      }
+
+      .payment-progress {
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 5px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+
+      .payment-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .payment-details {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 15px;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .payment-detail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 120px;
+        padding: 8px;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .payment-detail-label {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .payment-detail-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      .paid-detail .payment-detail-value {
+        color: #10b981;
+      }
+
+      .remaining-detail .payment-detail-value {
+        color: #ef4444;
+      }
+
+      .progress-detail .payment-detail-value {
+        color: #3b82f6;
+      }
+
+      /* Payment Details Section */
+      .payment-details-section {
+        margin: 25px 0;
+        padding: 20px;
+        background: #f0f9ff;
+        border-radius: 8px;
+        border: 1px solid #bae6fd;
+        page-break-inside: avoid;
+      }
+
+      .payment-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0369a1;
+        margin-bottom: 15px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .payment-title::before {
+        content: '💳';
+      }
+
+      .payment-methods {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .payment-method {
+        padding: 15px;
+        background: white;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .method-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .method-value {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 5px;
+        word-break: break-all;
+      }
+
+      .method-note {
+        font-size: 11px;
+        color: #94a3b8;
+        font-style: italic;
+      }
+
+      .bank-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed #e2e8f0;
+      }
+
+      .bank-detail:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .detail-label {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+      }
+
+      .detail-value {
+        font-size: 13px;
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      /* Totals */
+      .totals-section {
+        margin-top: 30px;
+        width: 100%;
+        max-width: 400px;
+        margin-left: auto;
+        page-break-inside: avoid;
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .total-label {
+        color: #666;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .total-value {
+        color: #1a1a1a;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .paid-row {
+        background: #f0fdf4;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid #a7f3d0;
+      }
+
+      .paid-row .total-label {
+        color: #065f46;
+        font-weight: 600;
+      }
+
+      .paid-row .total-value {
+        color: #065f46;
+        font-weight: 700;
+      }
+
+      .balance-row {
+        background: #fef3c7;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid #fde68a;
+      }
+
+      .balance-row .total-label {
+        color: #92400e;
+        font-weight: 600;
+      }
+
+      .balance-row .total-value {
+        color: #92400e;
+        font-weight: 700;
+        font-size: 18px;
+      }
+
+      .grand-total {
+        border-top: 2px solid #1a1a1a;
+        margin-top: 15px;
+        padding-top: 20px;
+      }
+
+      .grand-total .total-label {
+        font-size: 18px;
+        color: #1a1a1a;
+        font-weight: 700;
+      }
+
+      .grand-total .total-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: #1a1a1a;
+      }
+
+      /* Notes Section */
+      .notes-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fefce8;
+        border-radius: 8px;
+        border-left: 4px solid #f59e0b;
+        page-break-inside: avoid;
+      }
+
+      .notes-title {
+        font-weight: 600;
+        color: #92400e;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .notes-title::before {
+        content: '📝';
+      }
+
+      .notes-content {
+        color: #854d0e;
+        line-height: 1.6;
+        font-size: 13px;
+        white-space: pre-wrap;
+      }
+
+      /* Footer */
+      .invoice-footer {
+        margin-top: 40px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+        text-align: center;
+        color: #888;
+        font-size: 11px;
+        page-break-inside: avoid;
+      }
+
+      .footer-message {
+        font-style: italic;
+        margin-bottom: 20px;
+        color: #666;
+        font-size: 13px;
+        line-height: 1.5;
+        padding: 0 20px;
+      }
+
+      .company-contact {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        margin-top: 20px;
+        font-size: 11px;
+        flex-wrap: wrap;
+      }
+
+      .company-contact span {
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* Print Styles */
+      @media print {
+        body {
+          padding: 20px 15px !important;
+          font-size: 12px !important;
+        }
+        
+        .invoice-wrapper {
+          max-width: 100% !important;
+          margin: 0 !important;
+        }
+        
+        /* Force black and white for printing */
+        * {
+          color: #000 !important;
+        }
+        
+        /* Control page breaks */
+        .invoice-header,
+        .info-grid,
+        .payment-status,
+        .payment-details-section,
+        .totals-section,
+        .notes-section {
+          page-break-inside: avoid !important;
+        }
+        
+        /* Table row handling */
+        .items-table tr {
+          page-break-inside: avoid !important;
+        }
+        
+        /* Ensure table headers repeat on each page */
+        .items-table thead {
+          display: table-header-group !important;
+        }
+        
+        /* Remove backgrounds for better printing */
+        .info-block,
+        .payment-status,
+        .payment-details-section,
+        .paid-row,
+        .balance-row,
+        .notes-section {
+          background: #fff !important;
+          border: 1px solid #ddd !important;
+        }
+        
+        /* Hide unnecessary elements */
+        .no-print {
+          display: none !important;
+        }
+        
+        /* Adjust spacing for print */
+        .invoice-footer {
+          page-break-inside: avoid;
+          position: relative;
+        }
+        
+        .payment-methods {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body {
+          padding: 20px 15px;
+        }
+        
+        .info-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+        
+        .payment-details {
+          flex-direction: column;
+          gap: 10px;
+        }
+        
+        .payment-methods {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+        
+        .company-contact {
+          flex-direction: column;
+          gap: 10px;
+        }
       }
 
   body
-    header
-      .logo
-        img(src=settings.public_server_file+settings.company_logo)
-      .company-info
-        p.strong #{settings.company_name}
-        p #{settings.company_address}
-        p #{settings.company_reg_number}
+    .invoice-wrapper
+      //- Header
+      .invoice-header
+        .company-section
+          .company-name #{settings.company_name}
+          .company-details
+            p #{settings.company_address}
+            p #{settings.company_reg_number}
+            if settings.company_phone
+              p 📞 #{settings.company_phone}
+            if settings.company_email
+              p ✉️ #{settings.company_email}
 
-    h1.invoice #{translate('invoice')}
+        .invoice-title-section
+          .invoice-title #{translate('INVOICE')}
+          .invoice-number ##{model.number}/#{model.year || ""}
+          .invoice-date #{moment(model.date).format('DD MMM YYYY')}
 
-    .invoice-meta
-      .box
-        strong #{translate('Date')}
-        span #{moment(model.date).format(dateFormat)}
-      .box
-        strong #{translate('Expired Date')}
-        span #{moment(model.expiredDate).format(dateFormat)}
-      .box
-        strong #{translate('Number')}
-        span ##{model.number}/#{model.year || ""}
+      //- Information Grid
+      .info-grid
+  .info-block
+    .block-title #{translate('Invoice Details')}
+    .info-row
+      .info-label Date:
+      .info-value #{moment(model.date).format('DD MMMM YYYY')}
+    .info-row
+      .info-label Due Date:
+      .info-value #{moment(model.expiredDate).format('DD MMMM YYYY')}
+    .info-row
+      .info-label Status:
+      .info-value
+        //- Check if due date has passed
+        - const isOverdue = moment().isAfter(moment(model.expiredDate))
+        
+        //- Determine status based on payment status and overdue condition
+        if model.paymentStatus === 'paid'
+          span.status-badge.status-paid Paid
+        else if isOverdue
+          span.status-badge.status-overdue Overdue
+        else if model.paymentStatus === 'partially'
+          span.status-badge.status-partial Partially Paid
+        else if model.paymentStatus === 'pending'
+          span.status-badge.status-pending Pending
+        else
+          span.status-badge.status-pending Pending
 
-    .billTo
-      p.strong #{translate('Bill To')}
-      p #{model.client.name}
-      p #{model.client.address}
-      p #{model.client.phone}
-      p #{model.client.email}
+        .info-block
+          .block-title #{translate('Bill To')}
+          .client-name #{model.client.name}
+          .client-details
+            if model.client.address
+              p #{model.client.address}
+            if model.client.phone
+              p 📞 #{model.client.phone}
+            if model.client.email
+              p ✉️ #{model.client.email}
 
-    table.table-invoice
-      thead
-        tr
-          th.service #{translate('Item')}
-          th #{translate('Quantity')}
-          th #{translate('Price')}
-          th #{translate('Total')}
-      tbody
-        each item in model.items
-          tr
-            td.service 
-              | #{item.itemName}
-              if item.description
-                br
-                small #{item.description}
-            td #{item.quantity}
-            td #{moneyFormatter({amount:item.price})}
-            td #{moneyFormatter({amount:item.total})}
-      tfoot
-        tr
-          td(colspan="3") #{translate('Sub Total')}
-          td #{moneyFormatter({amount:model.subTotal})}
-        tr
-          td(colspan="3") #{translate('Tax')} (#{model.taxRate}%)
-          td #{moneyFormatter({amount:model.taxTotal})}
-        tr.grand
-          td(colspan="3") #{translate('Grand Total')}
-          td #{moneyFormatter({amount:model.total})}
+      //- Items Table
+          //- Items Table
+      .items-section
+        .section-title #{translate('Items')}
+        table.items-table
+          thead
+            tr
+              th(style="color: white;") Description
+              th.text-center(style="color: white;") Qty
+              th.text-right(style="color: white;") Unit Price
+              th.text-right(style="color: white;") Amount
+          tbody
+            each item, index in model.items
+              tr
+                td
+                  .item-name #{item.itemName}
+                  if item.description
+                    .item-description #{item.description}
+                td.text-center #{item.quantity}
+                td.text-right #{moneyFormatter({amount:item.price})}
+                td.text-right #{moneyFormatter({amount:item.total})}
 
-    footer
-      | Thank you for your business! This invoice was generated automatically.
+      //- Payment Status Section
+      if model.paymentStatus === 'partially' && model.credit
+        .payment-status
+          .payment-status-title Payment Status: Partially Paid
+          .payment-progress
+            - const paidPercentage = ((model.credit / model.total) * 100).toFixed(1)
+            .payment-progress-bar(style=`width: ${paidPercentage}%`)
+          .payment-details
+            .payment-detail-item.paid-detail
+              .payment-detail-label Paid
+              .payment-detail-value #{moneyFormatter({amount:model.credit})}
+            .payment-detail-item.progress-detail
+              .payment-detail-label Progress
+              .payment-detail-value #{paidPercentage}%
+            .payment-detail-item.remaining-detail
+              .payment-detail-label Remaining
+              .payment-detail-value #{moneyFormatter({amount:model.total - model.credit})}
+
+      //- Totals Section (Force this to stay together)
+      .totals-section.avoid-break
+        .total-row
+          .total-label #{translate('Subtotal')}
+          .total-value #{moneyFormatter({amount:model.subTotal})}
+        
+        if model.discount > 0
+          .total-row
+            .total-label #{translate('Discount')}
+            .total-value -#{moneyFormatter({amount:model.discount})}
+        
+        if model.taxRate > 0
+          .total-row
+            .total-label #{translate('Tax')} (#{model.taxRate}%)
+            .total-value #{moneyFormatter({amount:model.taxTotal})}
+        
+        .total-row.grand-total
+          .total-label #{translate('Total Amount')}
+          .total-value #{moneyFormatter({amount:model.total})}
+        
+        //- Paid Amount
+        if model.credit > 0
+          .total-row.paid-row
+            .total-label #{translate('Amount Paid')}
+            .total-value #{moneyFormatter({amount:model.credit})}
+        
+        //- Balance Due
+        if model.paymentStatus !== 'paid'
+          - const balanceDue = model.total - (model.credit || 0) - (model.discount || 0)
+          .total-row.balance-row
+            .total-label #{translate('Balance Due')}
+            .total-value #{moneyFormatter({amount:balanceDue})}
+
+      //- Payment Details Section
+      .payment-details-section.avoid-break
+        .payment-title Payment Details
+        .payment-methods
+          .payment-method
+            .method-label UPI ID
+            .method-value 8777468277@mbkns
+          
+          .payment-method
+            .method-label Bank Account
+            .method-details
+              .bank-detail
+                span.detail-label Account Number:
+                span.detail-value 924010025759736
+              .bank-detail
+                span.detail-label IFSC Code:
+                span.detail-value UTIB0004771
+              .bank-detail
+                span.detail-label Account Holder:
+                span.detail-value Subhojit Dutta
+              .bank-detail
+                span.detail-label Bank:
+                span.detail-value Axis Bank
+
+      //- Notes Section
+      if model.notes
+        .notes-section.avoid-break
+          .notes-title #{translate('Notes')}
+          .notes-content #{model.notes}
+
+      //- Footer
+      .invoice-footer.avoid-break
+        .footer-message 
+          if model.paymentStatus === 'paid'
+            | Thank you for your payment. This invoice is fully paid.
+          else if model.paymentStatus === 'partially'
+            - const remainingBalance = model.total - (model.credit || 0) - (model.discount || 0)
+            | This is a system-generated invoice and does not require a physical signature.
+          else
+            | Thank you for choosing us! 
+        
+        .company-contact
+          if settings.company_phone
+            span 📞 #{settings.company_phone}
+          if settings.company_email
+            span ✉️ #{settings.company_email}
+          if settings.company_website
+            span 🌐 #{settings.company_website}
+        
+        p #{settings.company_name} | Reg: #{settings.company_reg_number}
